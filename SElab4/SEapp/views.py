@@ -1,6 +1,30 @@
 from .models import Product, Customer, Order
 from rest_framework import viewsets
 from .serializers import ProductSerializer, CustomerSerializer, OrderSerializer
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView
+from .forms import ProductForm
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'product_list.html'
+    context_object_name = 'products'
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_detail.html'
+    context_object_name = 'product'
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'product_create.html'
+    success_url = '../../products/'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
