@@ -1,2 +1,4 @@
 sevenv/*
-SELab4/.idea/*
+SElab4/.idea/*
+SElab4/SEapp/__pycache__/*
+SElab4/SElab4/__pycache__/*
