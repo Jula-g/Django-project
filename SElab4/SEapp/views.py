@@ -1,6 +1,10 @@
 from .models import Product, Customer, Order
 from rest_framework import viewsets
 from .serializers import ProductSerializer, CustomerSerializer, OrderSerializer
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAdminOrReadOnly
+
+permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
