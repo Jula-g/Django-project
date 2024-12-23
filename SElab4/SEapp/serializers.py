@@ -7,6 +7,11 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+    def validate(self, data):
+        if not data:
+            raise serializers.ValidationError("At least one field is required for update.")
+        return data
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
