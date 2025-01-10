@@ -26,7 +26,7 @@ jobs:
       - name: Generate API documentation
         run: |
           source sevenv/bin/activate
-          python SELab4/manage.py generateschema > docs.json
+          python ./SElab4/manage.py generateschema > docs.json
       - name: Commit and push documentation
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
