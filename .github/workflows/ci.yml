@@ -7,6 +7,30 @@ on:
       - part2-lab9
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:17
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: testdb
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start containers
+        run: docker-compose up --build -d
+
+      - name: Execute unit tests
+        run: docker exec $(docker-compose ps -q api) python djangoproject/manage.py test djangoproject/djangoapp/tests
+
   docs:
     runs-on: ubuntu-latest
     permissions:
@@ -14,19 +38,23 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Set up environment
+
+      - name: Set up Python environment
         uses: actions/setup-python@v2
         with:
-          python-version: 3.12 # Change to your Python version
+          python-version: 3.12
+
       - name: Install dependencies
         run: |
           python -m venv sevenv
           source sevenv/bin/activate
           pip install -r requirements.txt
+
       - name: Generate API documentation
         run: |
           source sevenv/bin/activate
           python ./SElab4/manage.py generateschema > docs.json
+
       - name: Commit and push documentation
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
